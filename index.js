@@ -8,6 +8,7 @@ window.addEventListener('load', async (event) => {
 
   const canvas = document.getElementById('canvas');
   const inputs = document.getElementsByTagName('input');
+  const jitterInput = document.getElementById('jitter');
   const perpendicularComponentElement = document.getElementById('perpendicular-component');
   const parallelComponentElement = document.getElementById('parallel-component');
 
@@ -23,6 +24,13 @@ window.addEventListener('load', async (event) => {
 
   [].forEach.call(inputs, (input) => {
     input.addEventListener('change', findChecked);
+  });
+
+  let jitter = false;
+  jitterInput.checked = false;
+
+  jitterInput.addEventListener('change', async (event) => {
+    jitter = event.target.checked;
   });
 
   findChecked();
@@ -60,6 +68,13 @@ window.addEventListener('load', async (event) => {
       perpendicularComponentElement.innerHTML = '-';
       parallelComponentElement.innerHTML = '-';
       return;
+    }
+
+    if (jitter) {
+      vectors[0].x += ((Math.random() - 0.5) * 0.1);
+      vectors[0].y += ((Math.random() - 0.5) * 0.1);
+      vectors[1].x += ((Math.random() - 0.5) * 0.1);
+      vectors[1].y += ((Math.random() - 0.5) * 0.1);
     }
 
     const aPerpendicularB = Vector.dotProduct(vectors[0], Vector.perpendicular(vectors[1]));
