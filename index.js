@@ -3,6 +3,7 @@ import { mouseDrag, nearest } from './util.js';
 
 window.addEventListener('load', async (event) => {
   const document = event.target;
+  const window = event.currentTarget;
 
   const canvas = document.getElementById('canvas');
 
