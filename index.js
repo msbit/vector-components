@@ -2,13 +2,24 @@ import { wrappedContext } from './context.js';
 import { mouseDrag, scaleToCanvas } from './util.js';
 import { Vector } from './vector.js';
 
+function checkbox (document, id, handler) {
+  const input = document.getElementById(id);
+  if (!input) { return; }
+
+  input.addEventListener('change', async (event) => {
+    handler(event.target.checked);
+  });
+
+  handler(false);
+  input.checked = false;
+}
+
 window.addEventListener('load', async (event) => {
   const document = event.target;
   const window = event.currentTarget;
 
   const canvas = document.getElementById('canvas');
   const inputs = document.getElementsByTagName('input');
-  const jitterInput = document.getElementById('jitter');
   const perpendicularComponentElement = document.getElementById('perpendicular-component');
   const parallelComponentElement = document.getElementById('parallel-component');
 
@@ -27,11 +38,10 @@ window.addEventListener('load', async (event) => {
   });
 
   let jitter = false;
-  jitterInput.checked = false;
+  let rotate = false;
 
-  jitterInput.addEventListener('change', async (event) => {
-    jitter = event.target.checked;
-  });
+  checkbox(document, 'jitter', x => jitter = x);
+  checkbox(document, 'rotate', x => rotate = x);
 
   findChecked();
 
@@ -66,6 +76,11 @@ window.addEventListener('load', async (event) => {
           vectors[i].y += ((Math.random() - 0.5) * 0.1);
         }
       }
+    }
+
+    if (rotate && vectors[0] !== null) {
+      let v = Vector.scalarProduct(Vector.perpendicular(vectors[0]), 0.05);
+      vectors[0] = Vector.add(vectors[0], v);
     }
 
     if (vectors[0] === null || vectors[1] === null) {
