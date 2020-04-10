@@ -79,8 +79,15 @@ window.addEventListener('load', async (event) => {
     }
 
     if (rotate && vectors[0] !== null) {
-      let v = Vector.scalarProduct(Vector.perpendicular(vectors[0]), 0.05);
-      vectors[0] = Vector.add(vectors[0], v);
+      const magnitude = Vector.magnitude(vectors[0]);
+      let angle = Math.atan2(vectors[0].y, vectors[0].x);
+      angle += 0.01;
+      let v = Vector.normalise({
+        x: Math.cos(angle),
+        y: Math.sin(angle)
+      });
+      v = Vector.scalarProduct(v, magnitude);
+      vectors[0] = v;
     }
 
     if (vectors[0] === null || vectors[1] === null) {
