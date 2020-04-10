@@ -33,4 +33,18 @@ function drawGrid (context, minX, minY, maxX, maxY) {
   context.restore();
 }
 
-export { clear, drawGrid };
+function drawVector (context, vector, strokeStyle) {
+  const { start, end } = vector;
+  context.save();
+
+  context.strokeStyle = strokeStyle;
+
+  context.beginPath();
+  context.moveTo(start.x, start.y);
+  context.lineTo(end.x, end.y);
+  context.stroke();
+
+  context.restore();
+}
+
+export { clear, drawGrid, drawVector };

@@ -1,4 +1,4 @@
-import { clear, drawGrid } from './context.js';
+import { clear, drawGrid, drawVector } from './context.js';
 import { mouseDrag, nearest } from './util.js';
 
 window.addEventListener('load', async (event) => {
@@ -8,19 +8,25 @@ window.addEventListener('load', async (event) => {
 
   const context = canvas.getContext('2d');
 
-  clear(context);
-  drawGrid(context, -15, -10, 15, 10);
+  let draftVector;
+  const vectors = [];
+
   mouseDrag(canvas, x => nearest(-15, -10, 15, 10, x)).subscribe(({ start, end }) => {
-    context.save();
+    draftVector = { start, end };
+  }, null, ({ start, end }) => {
+    vectors.push({ start, end });
 
-    context.strokeStyle = 'blue';
-    context.strokeWidth = 2;
-
-    context.beginPath();
-    context.moveTo(start.x, start.y);
-    context.lineTo(end.x, end.y);
-    context.stroke();
-
-    context.restore();
+    draftVector = null;
   });
+
+  window.setInterval(async (foo, bar, baz) => {
+    clear(context);
+    drawGrid(context, -15, -10, 15, 10);
+
+    vectors.forEach(v => drawVector(context, v, 'green'));
+
+    if (draftVector) {
+      drawVector(context, draftVector, 'blue');
+    }
+  }, 40);
 });
