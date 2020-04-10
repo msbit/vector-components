@@ -54,11 +54,20 @@ function nearest (min, max, event) {
 function scaleToElement (min, max, event) {
   const clientRect = event.target.getBoundingClientRect();
 
-  const clientX = event.clientX - clientRect.x;
-  const clientY = event.clientY - clientRect.y;
+  let source = event;
 
-  const x = scale(0, event.target.width, min.x, max.x, clientX);
-  const y = scale(0, event.target.height, min.y, max.y, clientY);
+  switch (event.type) {
+    case 'touchstart':
+    case 'touchmove':
+      source = event.touches[0];
+      break;
+  }
+
+  const clientX = source.clientX - clientRect.x;
+  const clientY = source.clientY - clientRect.y;
+
+  const x = scale(0, clientRect.width, min.x, max.x, clientX);
+  const y = scale(0, clientRect.height, min.y, max.y, clientY);
 
   return { x, y };
 }
