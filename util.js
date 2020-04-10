@@ -4,25 +4,47 @@ function mouseDrag (element, translator) {
   const completeSubscribers = [];
 
   let start;
+  let end;
 
-  element.addEventListener('mousedown', async (event) => {
+  const startHandler = async (event) => {
     start = translator(event);
+    end = translator(event);
 
-    nextSubscribers.forEach(s => s({ start, end: translator(event) }));
-  });
+    nextSubscribers.forEach(s => s({ start, end }));
+  };
 
-  element.addEventListener('mousemove', async (event) => {
+  const moveHandler = async (event) => {
     if (!start) { return; }
 
-    nextSubscribers.forEach(s => s({ start, end: translator(event) }));
-  });
+    end = translator(event);
+
+    nextSubscribers.forEach(s => s({ start, end }));
+  };
+
+  element.addEventListener('mousedown', startHandler);
+  element.addEventListener('touchstart', startHandler);
+
+  element.addEventListener('mousemove', moveHandler);
+  element.addEventListener('touchmove', moveHandler);
 
   element.addEventListener('mouseup', async (event) => {
     if (!start) { return; }
 
-    completeSubscribers.forEach(s => s({ start, end: translator(event) }));
+    end = translator(event);
+
+    completeSubscribers.forEach(s => s({ start, end }));
 
     start = null;
+    end = null;
+  });
+
+  element.addEventListener('touchend', async (event) => {
+    if (!start) { return; }
+
+    completeSubscribers.forEach(s => s({ start, end }));
+
+    start = null;
+    end = null;
   });
 
   return {
