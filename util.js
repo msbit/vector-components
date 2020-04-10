@@ -1,3 +1,21 @@
+function mouseDrag (element, translator) {
+  let start;
+
+  element.addEventListener('mousedown', async (event) => {
+    start = translator(event);
+  });
+
+  return new rxjs.Observable(async (subscriber) => {
+    element.addEventListener('mouseup', async (event) => {
+      if (!start) { return; }
+
+      subscriber.next({ start, end: translator(event) });
+
+      start = null;
+    });
+  });
+}
+
 function nearest (minX, minY, maxX, maxY, event) {
   const clientRect = event.target.getBoundingClientRect();
 
@@ -20,4 +38,4 @@ function scale (inputMin, inputMax, outputMin, outputMax, input) {
   return ((input - inputMin) * (outputRange / inputRange)) + outputMin;
 }
 
-export { nearest, scale };
+export { mouseDrag, nearest, scale };

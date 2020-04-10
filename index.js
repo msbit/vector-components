@@ -1,5 +1,5 @@
 import { clear, drawGrid } from './context.js';
-import { nearest } from './util.js';
+import { mouseDrag, nearest } from './util.js';
 
 window.addEventListener('load', async (event) => {
   const document = event.target;
@@ -10,16 +10,16 @@ window.addEventListener('load', async (event) => {
 
   clear(context);
   drawGrid(context, -15, -10, 15, 10);
-
-  canvas.addEventListener('click', async (event) => {
-    const { x, y } = nearest(-15, -10, 15, 10, event);
-
+  mouseDrag(canvas, x => nearest(-15, -10, 15, 10, x)).subscribe(({ start, end }) => {
     context.save();
 
-    context.fillStyle = 'green';
+    context.strokeStyle = 'blue';
+    context.strokeWidth = 2;
+
     context.beginPath();
-    context.ellipse(x, y, 5, 5, 0, 0, Math.PI * 2);
-    context.fill();
+    context.moveTo(start.x, start.y);
+    context.lineTo(end.x, end.y);
+    context.stroke();
 
     context.restore();
   });
