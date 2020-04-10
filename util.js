@@ -43,7 +43,7 @@ function mouseDrag (element, translator) {
 }
 
 function nearest (min, max, event) {
-  const { x: scaledX, y: scaledY } = scaleToCanvas(min, max, event);
+  const { x: scaledX, y: scaledY } = scaleToElement(min, max, event);
 
   const x = Math.round(scaledX);
   const y = Math.round(scaledY);
@@ -51,7 +51,7 @@ function nearest (min, max, event) {
   return { x, y };
 }
 
-function scaleToCanvas (min, max, event) {
+function scaleToElement (min, max, event) {
   const clientRect = event.target.getBoundingClientRect();
 
   const clientX = event.clientX - clientRect.x;
@@ -70,4 +70,4 @@ function scale (inputMin, inputMax, outputMin, outputMax, input) {
   return ((input - inputMin) * (outputRange / inputRange)) + outputMin;
 }
 
-export { mouseDrag, nearest, scale, scaleToCanvas };
+export { mouseDrag, nearest, scale, scaleToElement };

@@ -1,5 +1,5 @@
 import { wrappedContext } from './context.js';
-import { mouseDrag, scaleToCanvas } from './util.js';
+import { mouseDrag, scaleToElement } from './util.js';
 import { Vector } from './vector.js';
 
 function checkbox (document, id, handler) {
@@ -45,7 +45,7 @@ window.addEventListener('load', async (event) => {
 
   findChecked();
 
-  mouseDrag(canvas, event => scaleToCanvas({ x: -10, y: -10 }, { x: 10, y: 10 }, event)).subscribe(({ start, end }) => {
+  mouseDrag(canvas, event => scaleToElement({ x: -10, y: -10 }, { x: 10, y: 10 }, event)).subscribe(({ start, end }) => {
     if (vectorIndex === -1) { return; }
 
     if (end.x === 0 && end.y === 0) {
