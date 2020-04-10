@@ -12,12 +12,8 @@ window.addEventListener('load', async (event) => {
   const context = wrappedContext(canvas.getContext('2d'), { x: -10, y: -10 }, { x: 10, y: 10 });
 
   let vectorIndex = -1;
-  const draftVectors = [null, null];
-  const draftVectorColours = ['lightblue', 'lightgreen'];
-  const draftPerpendicularVectors = [null, null];
   const vectors = [null, null];
   const vectorColours = ['blue', 'green'];
-  const perpendicularVectors = [null, null];
 
   function findChecked () {
     vectorIndex = [].findIndex.call(inputs, x => x.checked);
@@ -33,23 +29,17 @@ window.addEventListener('load', async (event) => {
     if (vectorIndex === -1) { return; }
 
     if (end.x === 0 && end.y === 0) {
-      draftVectors[vectorIndex] = null;
-      draftPerpendicularVectors[vectorIndex] = null;
+      vectors[vectorIndex] = null;
       return;
     }
 
-    draftVectors[vectorIndex] = end;
-    draftPerpendicularVectors[vectorIndex] = Vector.perpendicular(end);
+    vectors[vectorIndex] = end;
   }, null, ({ start, end }) => {
     if (vectorIndex === -1) { return; }
 
     if (end.x !== 0 || end.y !== 0) {
       vectors[vectorIndex] = end;
-      perpendicularVectors[vectorIndex] = Vector.perpendicular(end);
     }
-
-    draftVectors[vectorIndex] = null;
-    draftPerpendicularVectors[vectorIndex] = null;
   });
 
   window.setInterval(async () => {
@@ -57,21 +47,22 @@ window.addEventListener('load', async (event) => {
     context.drawGrid();
 
     for (let i = 0; i < 2; i++) {
-      if (draftVectors[i] !== null) {
-        context.drawVector(draftVectors[i], draftVectorColours[i]);
-      }
-
-      if (draftPerpendicularVectors[i] !== null) {
-        context.drawVector(draftPerpendicularVectors[i], 'grey');
-      }
-
       if (vectors[i] !== null) {
         context.drawVector(vectors[i], vectorColours[i]);
-      }
-
-      if (perpendicularVectors[i] !== null) {
-        context.drawVector(perpendicularVectors[i], 'black');
+        context.drawVector(Vector.perpendicular(vectors[i]), 'black');
+        context.drawVector(Vector.normalise(vectors[i]), 'black');
       }
     }
+
+    if (vectors[0] === null || vectors[1] === null) { return; }
+
+    const aPerpendicularB = Vector.dotProduct(vectors[0], Vector.perpendicular(vectors[1]));
+    const aParallelB = Vector.dotProduct(vectors[0], Vector.normalise(vectors[1]));
+
+    const perpendicularVector = Vector.scalarProduct(Vector.perpendicular(vectors[1]), aPerpendicularB);
+    const parallelVector = Vector.scalarProduct(Vector.normalise(vectors[1]), aParallelB);
+
+    context.drawVector(perpendicularVector, 'red');
+    context.drawVector(parallelVector, 'red');
   }, 40);
 });
