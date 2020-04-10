@@ -1,4 +1,5 @@
 import { scale } from './util.js';
+import { Vector } from './vector.js';
 
 function wrappedContext (context, min, max) {
   const origin = {
@@ -49,6 +50,13 @@ function wrappedContext (context, min, max) {
 
     drawVector: (vector, style) => {
       const { x, y } = scaleVector(vector);
+
+      const magnitude = Vector.magnitude({
+        x: x - origin.x,
+        y: y - origin.y
+      });
+
+      if (magnitude < 10) { return; }
 
       context.save();
 
