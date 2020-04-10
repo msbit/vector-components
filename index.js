@@ -13,9 +13,16 @@ window.addEventListener('load', async (event) => {
   const vectors = [];
 
   mouseDrag(canvas, event => nearest({ x: -15, y: -10 }, { x: 15, y: 10 }, event)).subscribe(({ start, end }) => {
+    if (start.x === end.x && start.y === end.y) {
+      draftVector = null;
+      return;
+    }
+
     draftVector = { start, end };
   }, null, ({ start, end }) => {
-    vectors.push({ start, end });
+    if (start.x !== end.x && start.y !== end.y) {
+      vectors.push({ start, end });
+    }
 
     draftVector = null;
   });
