@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "rxjs": "^6.5.5"
+    "@reactivex/rxjs": "^6.5.5"
   }
 }
