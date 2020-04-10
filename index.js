@@ -1,4 +1,4 @@
-import { clear, drawGrid, drawVector } from './context.js';
+import { wrappedContext } from './context.js';
 import { mouseDrag, nearest } from './util.js';
 
 window.addEventListener('load', async (event) => {
@@ -7,7 +7,7 @@ window.addEventListener('load', async (event) => {
 
   const canvas = document.getElementById('canvas');
 
-  const context = canvas.getContext('2d');
+  const context = wrappedContext(canvas.getContext('2d'), { x: -15, y: -10 }, { x: 15, y: 10 });
 
   let draftVector;
   const vectors = [];
@@ -21,13 +21,13 @@ window.addEventListener('load', async (event) => {
   });
 
   window.setInterval(async (foo, bar, baz) => {
-    clear(context);
-    drawGrid(context, { x: -15, y: -10 }, { x: 15, y: 10 });
+    context.clear();
+    context.drawGrid();
 
-    vectors.forEach(v => drawVector(context, v, 'green'));
+    vectors.forEach(v => context.drawVector(v, 'green'));
 
     if (draftVector) {
-      drawVector(context, draftVector, 'blue');
+      context.drawVector(draftVector, 'blue');
     }
   }, 40);
 });

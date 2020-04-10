@@ -46,11 +46,8 @@ function nearest (min, max, event) {
   const clientX = event.clientX - clientRect.x;
   const clientY = event.clientY - clientRect.y;
 
-  const rawX = Math.round(scale(0, event.target.width, min.x, max.x, clientX));
-  const rawY = Math.round(scale(0, event.target.height, min.y, max.y, clientY));
-
-  const x = scale(min.x, max.x, 0, event.target.width, rawX);
-  const y = scale(min.y, max.y, 0, event.target.height, rawY);
+  const x = Math.round(scale(0, event.target.width, min.x, max.x, clientX));
+  const y = Math.round(scale(0, event.target.height, min.y, max.y, clientY));
 
   return { x, y };
 }
