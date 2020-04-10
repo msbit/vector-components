@@ -61,6 +61,10 @@ window.addEventListener('load', async (event) => {
         context.drawVector(vectors[i], vectorColours[i]);
         context.drawVector(Vector.perpendicular(vectors[i]), 'black');
         context.drawVector(Vector.normalise(vectors[i]), 'black');
+        if (jitter) {
+          vectors[i].x += ((Math.random() - 0.5) * 0.1);
+          vectors[i].y += ((Math.random() - 0.5) * 0.1);
+        }
       }
     }
 
@@ -68,13 +72,6 @@ window.addEventListener('load', async (event) => {
       perpendicularComponentElement.innerHTML = '-';
       parallelComponentElement.innerHTML = '-';
       return;
-    }
-
-    if (jitter) {
-      vectors[0].x += ((Math.random() - 0.5) * 0.1);
-      vectors[0].y += ((Math.random() - 0.5) * 0.1);
-      vectors[1].x += ((Math.random() - 0.5) * 0.1);
-      vectors[1].y += ((Math.random() - 0.5) * 0.1);
     }
 
     const aPerpendicularB = Vector.dotProduct(vectors[0], Vector.perpendicular(vectors[1]));
