@@ -1,19 +1,43 @@
 function mouseDrag (element, translator) {
+  const nextSubscribers = [];
+  const errorSubscribers = [];
+  const completeSubscribers = [];
+
   let start;
 
   element.addEventListener('mousedown', async (event) => {
     start = translator(event);
   });
 
-  return new rxjs.Observable(async (subscriber) => {
-    element.addEventListener('mouseup', async (event) => {
-      if (!start) { return; }
+  element.addEventListener('mousemove', async (event) => {
+    if (!start) { return; }
 
-      subscriber.next({ start, end: translator(event) });
-
-      start = null;
-    });
+    nextSubscribers.forEach(s => s({ start, end: translator(event) }));
   });
+
+  element.addEventListener('mouseup', async (event) => {
+    if (!start) { return; }
+
+    completeSubscribers.forEach(s => s({ start, end: translator(event) }));
+
+    start = null;
+  });
+
+  return {
+    subscribe: (next, error, complete) => {
+      if (next) {
+        nextSubscribers.push(next);
+      }
+
+      if (error) {
+        errorSubscribers.push(error);
+      }
+
+      if (complete) {
+        completeSubscribers.push(complete);
+      }
+    }
+  };
 }
 
 function nearest (minX, minY, maxX, maxY, event) {
