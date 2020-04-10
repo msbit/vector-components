@@ -7,6 +7,8 @@ function mouseDrag (element, translator) {
 
   element.addEventListener('mousedown', async (event) => {
     start = translator(event);
+
+    nextSubscribers.forEach(s => s({ start, end: translator(event) }));
   });
 
   element.addEventListener('mousemove', async (event) => {
