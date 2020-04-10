@@ -8,6 +8,8 @@ window.addEventListener('load', async (event) => {
 
   const canvas = document.getElementById('canvas');
   const inputs = document.getElementsByTagName('input');
+  const perpendicularComponentElement = document.getElementById('perpendicular-component');
+  const parallelComponentElement = document.getElementById('parallel-component');
 
   const context = wrappedContext(canvas.getContext('2d'), { x: -10, y: -10 }, { x: 10, y: 10 });
 
@@ -54,10 +56,17 @@ window.addEventListener('load', async (event) => {
       }
     }
 
-    if (vectors[0] === null || vectors[1] === null) { return; }
+    if (vectors[0] === null || vectors[1] === null) {
+      perpendicularComponentElement.innerHTML = '-';
+      parallelComponentElement.innerHTML = '-';
+      return;
+    }
 
     const aPerpendicularB = Vector.dotProduct(vectors[0], Vector.perpendicular(vectors[1]));
     const aParallelB = Vector.dotProduct(vectors[0], Vector.normalise(vectors[1]));
+
+    perpendicularComponentElement.innerHTML = aPerpendicularB;
+    parallelComponentElement.innerHTML = aParallelB;
 
     const perpendicularVector = Vector.scalarProduct(Vector.perpendicular(vectors[1]), aPerpendicularB);
     const parallelVector = Vector.scalarProduct(Vector.normalise(vectors[1]), aParallelB);
