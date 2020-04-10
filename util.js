@@ -43,13 +43,22 @@ function mouseDrag (element, translator) {
 }
 
 function nearest (min, max, event) {
+  const { x: scaledX, y: scaledY } = scaleToCanvas(min, max, event);
+
+  const x = Math.round(scaledX);
+  const y = Math.round(scaledY);
+
+  return { x, y };
+}
+
+function scaleToCanvas (min, max, event) {
   const clientRect = event.target.getBoundingClientRect();
 
   const clientX = event.clientX - clientRect.x;
   const clientY = event.clientY - clientRect.y;
 
-  const x = Math.round(scale(0, event.target.width, min.x, max.x, clientX));
-  const y = Math.round(scale(0, event.target.height, min.y, max.y, clientY));
+  const x = scale(0, event.target.width, min.x, max.x, clientX);
+  const y = scale(0, event.target.height, min.y, max.y, clientY);
 
   return { x, y };
 }
@@ -61,4 +70,4 @@ function scale (inputMin, inputMax, outputMin, outputMax, input) {
   return ((input - inputMin) * (outputRange / inputRange)) + outputMin;
 }
 
-export { mouseDrag, nearest, scale };
+export { mouseDrag, nearest, scale, scaleToCanvas };
