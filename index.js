@@ -12,7 +12,7 @@ window.addEventListener('load', async (event) => {
   let draftVector;
   const vectors = [];
 
-  mouseDrag(canvas, x => nearest(-15, -10, 15, 10, x)).subscribe(({ start, end }) => {
+  mouseDrag(canvas, event => nearest({ x: -15, y: -10 }, { x: 15, y: 10 }, event)).subscribe(({ start, end }) => {
     draftVector = { start, end };
   }, null, ({ start, end }) => {
     vectors.push({ start, end });
@@ -22,7 +22,7 @@ window.addEventListener('load', async (event) => {
 
   window.setInterval(async (foo, bar, baz) => {
     clear(context);
-    drawGrid(context, -15, -10, 15, 10);
+    drawGrid(context, { x: -15, y: -10 }, { x: 15, y: 10 });
 
     vectors.forEach(v => drawVector(context, v, 'green'));
 

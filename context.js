@@ -9,21 +9,21 @@ function clear (context) {
   context.restore();
 }
 
-function drawGrid (context, minX, minY, maxX, maxY) {
+function drawGrid (context, min, max) {
   context.save();
 
-  for (let x = minX; x <= maxX; x++) {
+  for (let x = min.x; x <= max.x; x++) {
     context.strokeStyle = x === 0 ? 'red' : 'grey';
-    const canvasX = scale(minX, maxX, 0, context.canvas.width, x);
+    const canvasX = scale(min.x, max.x, 0, context.canvas.width, x);
     context.beginPath();
     context.moveTo(canvasX, 0);
     context.lineTo(canvasX, context.canvas.height);
     context.stroke();
   }
 
-  for (let y = minY; y <= maxY; y++) {
+  for (let y = min.y; y <= max.y; y++) {
     context.strokeStyle = y === 0 ? 'red' : 'grey';
-    const canvasY = scale(minY, maxY, 0, context.canvas.height, y);
+    const canvasY = scale(min.y, max.y, 0, context.canvas.height, y);
     context.beginPath();
     context.moveTo(0, canvasY);
     context.lineTo(context.canvas.width, canvasY);
