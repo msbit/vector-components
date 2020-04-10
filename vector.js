@@ -1,11 +1,6 @@
 class Vector {
-  constructor (x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
   static add ({ x: aX, y: aY }, { x: bX, y: bY }) {
-    return new Vector(aX + bX, aY + bY);
+    return { x: aX + bX, y: aY + bY };
   }
 
   static dotProduct ({ x: aX, y: aY }, { x: bX, y: bY }) {
@@ -20,7 +15,7 @@ class Vector {
     const magnitude = Vector.magnitude({ x, y });
     x /= magnitude;
     y /= magnitude;
-    return new Vector(x, y);
+    return { x, y };
   }
 
   static perpendicular ({ x, y }) {
@@ -31,7 +26,7 @@ class Vector {
   }
 
   static scalarProduct ({ x, y }, r) {
-    return new Vector(x * r, y * r);
+    return { x: x * r, y: y * r };
   }
 }
 
