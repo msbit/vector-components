@@ -1,16 +1,15 @@
 import { scale } from './util.js';
 
 function wrappedContext (context, min, max) {
-  function scaleVector ({ start, end }) {
+  const origin = {
+    x: scale(min.x, max.x, 0, context.canvas.width, 0),
+    y: scale(min.y, max.y, 0, context.canvas.height, 0)
+  };
+
+  function scaleVector ({ x, y }) {
     return {
-      start: {
-        x: scale(min.x, max.x, 0, context.canvas.width, start.x),
-        y: scale(min.y, max.y, 0, context.canvas.height, start.y)
-      },
-      end: {
-        x: scale(min.x, max.x, 0, context.canvas.width, end.x),
-        y: scale(min.y, max.y, 0, context.canvas.height, end.y)
-      }
+      x: scale(min.x, max.x, 0, context.canvas.width, x),
+      y: scale(min.y, max.y, 0, context.canvas.height, y)
     };
   }
 
@@ -28,7 +27,7 @@ function wrappedContext (context, min, max) {
       context.save();
 
       for (let x = min.x; x <= max.x; x++) {
-        context.strokeStyle = x === 0 ? 'red' : 'grey';
+        context.strokeStyle = x === 0 ? 'grey' : 'lightgrey';
         const canvasX = scale(min.x, max.x, 0, context.canvas.width, x);
         context.beginPath();
         context.moveTo(canvasX, 0);
@@ -37,7 +36,7 @@ function wrappedContext (context, min, max) {
       }
 
       for (let y = min.y; y <= max.y; y++) {
-        context.strokeStyle = y === 0 ? 'red' : 'grey';
+        context.strokeStyle = y === 0 ? 'grey' : 'lightgrey';
         const canvasY = scale(min.y, max.y, 0, context.canvas.height, y);
         context.beginPath();
         context.moveTo(0, canvasY);
@@ -49,7 +48,7 @@ function wrappedContext (context, min, max) {
     },
 
     drawVector: (vector, style) => {
-      const { start, end } = scaleVector(vector);
+      const { x, y } = scaleVector(vector);
 
       context.save();
 
@@ -57,13 +56,13 @@ function wrappedContext (context, min, max) {
       context.strokeStyle = style;
 
       context.beginPath();
-      context.moveTo(start.x, start.y);
-      context.lineTo(end.x, end.y);
+      context.moveTo(origin.x, origin.y);
+      context.lineTo(x, y);
       context.stroke();
 
-      const angle = Math.atan2(end.y - start.y, end.x - start.x);
+      const angle = Math.atan2(y - origin.y, x - origin.x);
       context.beginPath();
-      context.translate(end.x, end.y);
+      context.translate(x, y);
       context.rotate(angle);
       context.moveTo(0, 0);
       context.lineTo(-10, -5);
