@@ -33,16 +33,26 @@ function drawGrid (context, minX, minY, maxX, maxY) {
   context.restore();
 }
 
-function drawVector (context, vector, strokeStyle) {
+function drawVector (context, vector, style) {
   const { start, end } = vector;
   context.save();
 
-  context.strokeStyle = strokeStyle;
+  context.fillStyle = style;
+  context.strokeStyle = style;
 
   context.beginPath();
   context.moveTo(start.x, start.y);
   context.lineTo(end.x, end.y);
   context.stroke();
+
+  const angle = Math.atan2(end.y - start.y, end.x - start.x);
+  context.beginPath();
+  context.translate(end.x, end.y);
+  context.rotate(angle);
+  context.moveTo(0, 0);
+  context.lineTo(-10, -5);
+  context.lineTo(-10, 5);
+  context.fill();
 
   context.restore();
 }
