@@ -66,17 +66,19 @@ window.addEventListener('load', async (event) => {
     context.clear();
     context.drawGrid();
 
-    for (let i = 0; i < 2; i++) {
-      if (vectors[i] !== null) {
-        context.drawVector(vectors[i], vectorColours[i]);
-        context.drawVector(Vector.perpendicular(vectors[i]), 'black');
-        context.drawVector(Vector.normalise(vectors[i]), 'black');
-        if (jitter) {
-          vectors[i].x += ((Math.random() - 0.5) * 0.1);
-          vectors[i].y += ((Math.random() - 0.5) * 0.1);
-        }
+    vectors.forEach((vector, i) => {
+      if (vector === null) {
+        return;
       }
-    }
+
+      context.drawVector(vector, vectorColours[i]);
+      context.drawVector(Vector.perpendicular(vector), 'black');
+      context.drawVector(Vector.normalise(vector), 'black');
+      if (jitter) {
+        vector.x += ((Math.random() - 0.5) * 0.1);
+        vector.y += ((Math.random() - 0.5) * 0.1);
+      }
+    });
 
     if (rotate && vectors[0] !== null) {
       const magnitude = Vector.magnitude(vectors[0]);
